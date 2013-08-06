@@ -15,6 +15,23 @@ namespace ProjectionsDsl.Tests
     public class DslTests
     {
         [Theory, AutoMoqData]
+        public void WithoutBuilder(
+            FakeProjectionSource source, FakeDocumentWriter writer, TestEvent @event)
+        {
+            writer.DB.Clear();
+            new Projection<ListOfProjectedState>(source, writer)
+                .InitialiseState(() => new ListOfProjectedState())
+                .When<TestEvent>((e, s) =>
+                    s.AddState(
+                        new TestProjectionState(e.SomeState)),
+                    e => e.Id);
+
+            source.Events.OnNext(@event);
+
+            writer.DB.Select(x => x.Value).ShouldContain<ListOfProjectedState>();
+        }
+        
+        [Theory, AutoMoqData]
         public void ShouldExecuteWhenForEvent(
             FakeProjectionSource source, FakeDocumentWriter writer, TestEvent @event)
         {
@@ -24,8 +41,8 @@ namespace ProjectionsDsl.Tests
                  .WithProjectionWriter(writer)
                  .Build();
 
-            projection.FromAll()
-                .Init(() => new ListOfProjectedState())
+            projection
+                .InitialiseState(() => new ListOfProjectedState())
                 .When<TestEvent>((e, s) =>
                     s.AddState(
                         new TestProjectionState(e.SomeState)),
@@ -46,8 +63,8 @@ namespace ProjectionsDsl.Tests
                  .WithProjectionWriter(writer)
                  .Build();
 
-            projection.FromAll()
-                .Init(() => new ListOfProjectedState())
+            projection
+                .InitialiseState(() => new ListOfProjectedState())
                 .When<TestEvent>((e, s) =>
                     s.AddState(
                         new TestProjectionState(e.SomeState)),

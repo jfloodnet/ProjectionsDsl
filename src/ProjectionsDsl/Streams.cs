@@ -33,67 +33,49 @@ namespace ProjectionsDsl
                     this.source = source;
                 }
 
-                public ConfigureProjectionBuilder<TState> WithProjectionWriter<TState>(IDocumentWriter<Guid, TState> writer)
+                public ConfigureProjection<TState> WithProjectionWriter<TState>(IDocumentWriter<Guid, TState> writer)
                 {
-                    return new ConfigureProjectionBuilder<TState>(this.source, writer);
+                    return new ConfigureProjection<TState>(this.source, writer);
                 }
 
-                public class ConfigureProjectionBuilder<TState>
+                public class ConfigureProjection<TState>
                 {
                     private IProjectionSource projectionSource;
                     private IDocumentWriter<Guid, TState> writer;
 
-                    public ConfigureProjectionBuilder(IProjectionSource projectionSource, IDocumentWriter<Guid, TState> writer)
+                    public ConfigureProjection(IProjectionSource projectionSource, IDocumentWriter<Guid, TState> writer)
                     {
                         this.projectionSource = projectionSource;
                         this.writer = writer;
                     }
-                    public ProjectionBuilder<TState> Build()
+                    public Projection<TState> Build()
                     {
-                        return new ProjectionBuilder<TState>(projectionSource, writer);
+                        return new Projection<TState>(projectionSource, writer);
                     }
                 }
             }
         }
     }
 
-    public class ProjectionBuilder<TState>
+    public class Projection<TState>
     {
         public IProjectionSource Source { get; private set; }
         public IDocumentWriter<Guid, TState> Writer { get; private set; }
 
-        public ProjectionBuilder(IProjectionSource projectionSource, IDocumentWriter<Guid, TState> writer)
+        public Projection(IProjectionSource projectionSource, IDocumentWriter<Guid, TState> writer)
         {
             this.Source = projectionSource;
             this.Writer = writer;
         }
 
-        public IInitialiseProjectionState<TState> FromAll()
+        public IProjection<TState> InitialiseState(Func<TState> init)
         {
-            return new ProjectionAcrossAllStreams<TState>(this.Source, this.Writer);
+            return new DocumentWriterProjection<TState>(Source, Writer, init);
         }
     }
 
-    public class ProjectionAcrossAllStreams<TState> : IInitialiseProjectionState<TState>
+    public class DocumentWriterProjection<TState> : IProjection<TState>
     {
-        private IProjectionSource source;
-        private IDocumentWriter<Guid, TState> writer;
-
-        public ProjectionAcrossAllStreams(IProjectionSource projectionSource, IDocumentWriter<Guid, TState> documentWriter)
-        {
-            this.source = projectionSource;
-            this.writer = documentWriter;
-        }
-        public IProjection<TState> Init(Func<TState> init)
-        {
-            return new DocumentWriterProjection<TState>(source, writer, init);
-        }
-    }
-
-    public class DocumentWriterProjection<TState> : IProjection<TState>, IObserver<IEvent>
-    {
-        private List<Tuple<Func<IEvent, Guid>, Func<IEvent, TState, TState>>> hash = new List<Tuple<Func<IEvent, Guid>, Func<IEvent, TState, TState>>>();
-
         private IProjectionSource source;
         private IDocumentWriter<Guid, TState> writer;
         private Func<TState> init;
@@ -109,36 +91,12 @@ namespace ProjectionsDsl
         {
             var idhandler = DelegateAdjuster.CastArgument(id);
             var handlerFunc = DelegateAdjuster.CastArgument(handler);
-            source.Events.Where(x => x.GetType() == typeof(TEvent)).Subscribe(e =>
-                this.writer.AddOrUpdate(idhandler(e), init, state => handlerFunc(e, state)));
+            source.Events.Where(x => x.GetType() == typeof(TEvent))
+                .Subscribe(e =>
+                    this.writer.AddOrUpdate(idhandler(e), init, state => handlerFunc(e, state))
+                );
             return this;
-        }
-
-        public void Start()
-        {
-
-        }
-
-        public void OnCompleted()
-        {
-
-        }
-
-        public void OnError(Exception error)
-        {
-
-        }
-
-        public void OnNext(IEvent value)
-        {
-            foreach (var t in hash)
-            {
-                Func<IEvent, Guid> id = t.Item1;
-                Func<IEvent, TState, TState> when = t.Item2;
-                Func<TState, TState> update = state => when(value, state);
-                this.writer.AddOrUpdate(id(value), init, update);
-            }
-        }
+        }       
     }
 
     public class DelegateAdjuster
