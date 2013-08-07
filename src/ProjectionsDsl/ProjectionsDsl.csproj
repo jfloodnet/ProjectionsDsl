@@ -51,13 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AddOrUpdateHint.cs" />
+    <Compile Include="Common\DelegateAdjuster.cs" />
+    <Compile Include="Core\DocumentWriterProjection.cs" />
+    <Compile Include="Core\IDocumentWriter.cs" />
+    <Compile Include="Core\IInitialiseProjectionState.cs" />
+    <Compile Include="Core\IProjection.cs" />
+    <Compile Include="Core\IProjectionSource.cs" />
+    <Compile Include="Core\Projection.cs" />
     <Compile Include="Streams.cs" />
-    <Compile Include="IEvent.cs" />
+    <Compile Include="Core\IEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

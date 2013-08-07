@@ -69,8 +69,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoFixture\AutoMoqDataAttribute.cs" />
     <Compile Include="DslTests.cs" />
+    <Compile Include="Fakes\FakeDocumentWriter.cs" />
+    <Compile Include="Fakes\FakeProjectionSource.cs" />
+    <Compile Include="Fakes\ListOfProjectedState.cs" />
+    <Compile Include="Fakes\NotInterestedInThis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Asserts\ShouldAssertions.cs" />
+    <Compile Include="Fakes\TestEvent.cs" />
+    <Compile Include="Fakes\TestProjectionState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -82,6 +90,7 @@
       <Name>ProjectionsDsl</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
