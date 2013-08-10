@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectionsDsl", "Projectio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectionsDsl.Tests", "ProjectionsDsl.Tests\ProjectionsDsl.Tests.csproj", "{7FF45F70-AC8C-4B13-9606-D105E87D42E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectionsDsl.GEventStore", "ProjectionsDsl.GEventStore\ProjectionsDsl.GEventStore.csproj", "{FFC49AD6-8298-40B5-AD0B-89EE4B16818F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{7FF45F70-AC8C-4B13-9606-D105E87D42E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FF45F70-AC8C-4B13-9606-D105E87D42E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FF45F70-AC8C-4B13-9606-D105E87D42E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC49AD6-8298-40B5-AD0B-89EE4B16818F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC49AD6-8298-40B5-AD0B-89EE4B16818F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC49AD6-8298-40B5-AD0B-89EE4B16818F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC49AD6-8298-40B5-AD0B-89EE4B16818F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

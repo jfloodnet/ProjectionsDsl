@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore.ClientAPI">
+      <HintPath>..\packages\EventStore.Client.2.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive.Core">
@@ -54,6 +60,7 @@
     <Compile Include="Core\AddOrUpdateHint.cs" />
     <Compile Include="Common\DelegateAdjuster.cs" />
     <Compile Include="Core\DocumentWriterProjection.cs" />
+    <Compile Include="Core\ICheckPointRepository.cs" />
     <Compile Include="Core\IDocumentWriter.cs" />
     <Compile Include="Core\IInitialiseProjectionState.cs" />
     <Compile Include="Core\IProjection.cs" />
